@@ -1,4 +1,5 @@
 class Api::CartsController < ApplicationController
+  include JSONErrors
   before_action :set_cart, only: [:show, :update, :destroy]
 
   # GET /carts
@@ -6,6 +7,21 @@ class Api::CartsController < ApplicationController
     @carts = Cart.all
 
     render json: @carts
+  end
+
+  def add_product
+    if products_params[:product_id].to_i.to_s != products_params[:product_id]
+      render_400(message: 'product_id is invalid')
+    elsif !products_params[:quantity].to_i.between?(1, 10)
+      render_400(message: 'Quantity is invalid')
+    else
+      @cart = Cart.last
+      @product = Product.find(products_params[:product_id])
+      products_params[:quantity].to_i.times do
+        @cart.products << @product
+      end
+      head :ok
+    end
   end
 
   def cart
@@ -87,5 +103,9 @@ class Api::CartsController < ApplicationController
     # Only allow a trusted parameter "white list" through.
     def cart_params
       params.require(:cart).permit(:content, :cookie)
+    end
+
+    def products_params
+      params.permit(:product_id, :quantity)
     end
 end

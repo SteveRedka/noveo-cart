@@ -1,6 +1,6 @@
 # Noveo cart
 
-Entry task for RoR dev job in Noveo.
+Demo cart API.
 
 ## Notes
 APIs should be versioned. If specs didn't say otherwise, I'd put carts into `api/v1/carts` group.
