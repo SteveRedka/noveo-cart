@@ -21,7 +21,8 @@ group :development do
 end
 
 group :test do
-  gem 'rspec'
+  gem 'rspec-rails'
+  gem 'factory_bot'
 end
 
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
