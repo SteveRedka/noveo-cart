@@ -4,6 +4,6 @@ FactoryBot.define do
   factory :product do
     sequence(:name) { |n| "Product ##{n}" }
     description 'Product Description'
-    price 50
+    sequence(:price) { |n| 50 + n * 100 }
   end
 end

@@ -8,9 +8,49 @@ class Api::CartsController < ApplicationController
     render json: @carts
   end
 
+  def cart
+    @cart = Cart.last
+    products = @cart.products
+    actual_products = products.uniq
+    products_arr = []
+    total_sum = @cart.total_price
+    actual_products.each do |product|
+      id = product.id
+      quantity = products.where(id: id).count
+      sum = product.price * quantity
+      products_arr << { id: id, quantity: quantity, sum: sum }
+    end
+    hash = {
+      data:
+        { total_sum: total_sum,
+          products_count: products.count,
+          products: products_arr
+        }
+    }
+    json = JSON.generate(hash)
+    render json: json
+  end
+
   # GET /carts/1
   def show
-    render json: @cart
+    products = @cart.products
+    actual_products = products.uniq
+    products_arr = []
+    actual_products.each do |product|
+      id = product.id
+      quantity = products.where(id: id).count
+      sum = product.price * quantity
+      products_arr << { id: id, quantity: quantity, sum: sum }
+    end
+    hash = {
+      data:
+        { total_sum: 500,
+          products_count: 6,
+          products: products_arr
+        }
+    }
+    json = JSON.generate(hash)
+    render json: json
   end
 
   # POST /carts
