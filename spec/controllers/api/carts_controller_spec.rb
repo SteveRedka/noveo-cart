@@ -33,6 +33,24 @@ RSpec.describe Api::CartsController, type: :controller do
   end
 
   describe 'POST cart' do
+    it 'should add existing products'
 
+    it 'should return error if product id is invalid'
+
+    it 'should return error if product quantity is invalid'
+
+    it 'should not return any data'
+
+    it 'should not permit more than 10 units posted at once'
+  end
+
+  describe 'DELETE cart' do
+    it 'should delete one product'
+
+    it 'should delete product record upon reaching zero'
+
+    it 'should return error 400 if product id is absent from system'
+
+    it 'should not return any data'
   end
 end
