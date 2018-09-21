@@ -1,5 +1,6 @@
 class Cart < ApplicationRecord
-  has_and_belongs_to_many :products
+  has_many :carts_products, class_name: 'CartsProduct'
+  has_many :products, through: :carts_products
 
   def total_price
     result = 0

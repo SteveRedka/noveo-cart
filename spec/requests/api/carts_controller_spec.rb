@@ -58,12 +58,29 @@ RSpec.describe Api::CartsController, type: :request do
   end
 
   describe 'DELETE cart' do
-    it 'should delete one product'
+    before do
+      3.times { cart.products << product50 }
+    end
+    it 'should delete one product' do
+      delete("/api/cart/#{product50.id}")
+      expect(cart.products.count).to eq 2
+    end
 
-    it 'should delete product record upon reaching zero'
+    it 'should delete product record upon reaching zero' do
+      3.times { delete("/api/cart/#{product50.id}") }
+      get '/api/cart'
+      @json_response = JSON.parse(response.body)
+      expect(@json_response['data']['products'].length).to eq 0
+    end
 
-    it 'should return error 400 if product id is absent from system'
+    it 'should return error 400 if product id is absent from system' do
+      delete("/api/cart/#{999}")
+      expect(response.code).to eq '400'
+    end
 
-    it 'should not return any data'
+    it 'should not return any data' do
+      delete("/api/cart/#{product50.id}")
+      expect(response.body).to eq ''
+    end
   end
 end

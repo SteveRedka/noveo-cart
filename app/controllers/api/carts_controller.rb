@@ -24,6 +24,14 @@ class Api::CartsController < ApplicationController
     end
   end
 
+  def delete_product
+    @cart = Cart.last
+    product_id = params[:product_id].to_i
+    @purchase = @cart.carts_products.where(product_id: product_id).last
+    @purchase.destroy
+    head :ok
+  end
+
   def cart
     @cart = Cart.last
     products = @cart.products
