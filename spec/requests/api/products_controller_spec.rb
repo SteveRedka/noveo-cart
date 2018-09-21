@@ -8,5 +8,11 @@ RSpec.describe Api::ProductsController, type: :request do
       get('/api/products')
       expect(JSON.parse(response.body).length).to eq(2)
     end
+
+    it 'doesn`t render timestamps' do
+      get('/api/products')
+      expect(response.body).not_to include('created_at')
+      expect(response.body).not_to include('updated_at')
+    end
   end
 end
