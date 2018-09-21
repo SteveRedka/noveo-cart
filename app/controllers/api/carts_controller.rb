@@ -35,15 +35,7 @@ class Api::CartsController < ApplicationController
       sum = product.price * quantity
       products_arr << { id: id, quantity: quantity, sum: sum }
     end
-    hash = {
-      data:
-        { total_sum: @cart.total_price,
-          products_count: products.count,
-          products: products_arr
-        }
-    }
-    json = JSON.generate(hash)
-    render json: json
+    render_cart(@cart.total_price, products.count, products_arr)
   end
 
   private
@@ -66,5 +58,17 @@ class Api::CartsController < ApplicationController
       return false
     end
     true
+  end
+
+  def render_cart(total_price, products_count, products_arr)
+    template = {
+      data:
+        { total_sum: total_price,
+          products_count: products_count,
+          products: products_arr
+        }
+    }
+    json = JSON.generate(template)
+    render json: json
   end
 end
