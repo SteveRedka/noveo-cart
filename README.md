@@ -2,9 +2,11 @@
 
 Demo cart API.
 
+[Live on heroku](https://noveo-cart.herokuapp.com/api/products)
+
 ## Prequesites
-Ruby 2.4.1
-bundler
+* Ruby 2.4.1
+* bundler
 
 ## Setup
 ```
@@ -13,6 +15,13 @@ cd noveo-cart
 bundle install
 rake db:setup
 rails s
+```
+
+## Deploy
+```
+git push heroku master
+heroku rake db:schema:load
+heroku rake db:seed
 ```
 
 ## Notes
