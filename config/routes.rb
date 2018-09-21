@@ -1,10 +1,8 @@
 Rails.application.routes.draw do
   namespace :api do
-    resources :products
+    get '/products/', to: 'products#index'
     get '/cart/', to: 'carts#cart'
     post '/cart/', to: 'carts#add_product'
-    # post '/cart/', to: 'carts#add_product'
-    # resources :carts
+    delete '/cart/:product_id', to: 'carts#delete_product'
   end
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end
