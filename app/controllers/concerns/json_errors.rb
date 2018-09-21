@@ -7,40 +7,26 @@ module JSONErrors
     rescue_from ActionController::ParameterMissing, with: :render_400
 
 
-    def render_400(errors = 'invalid_param_error', message: 'Invalid data parameters')
-      render_errors(errors, 400)
+    def render_400(type = 'invalid_param_error', message: 'Invalid data parameters')
+      render_errors(type: type, message: message, status: 400)
     end
 
-    def render_404(errors = 'invalid_request_error', message = 'Unable to resolve the request')
-      render_errors(errors, 404)
+    def render_404(type = 'invalid_request_error', message = 'Unable to resolve the request')
+      render_errors(type: type, message: message, status: 404)
     end
 
-    def render_500(errors = 'internal_server_error', message = 'Internal server error')
-      render_errors(errors, 500)
+    def render_500(type = 'internal_server_error', message = 'Internal server error')
+      render_errors(type: type, message: message, status: 500)
     end
 
-    def render_errors(errors, status = 400)
-      data = {
-        error: {
-
-        },
-        status: 'failed',
-        errors: Array.wrap(errors)
-      }
-
-      render json: data , status: status
+    def render_errors(type: 'internal_server_error', message: 'Internal server error', params: nil, status: 500)
+      result = { 'error':
+                 { 'type': type,
+                   'message': message
+                 }
+               }
+      result['params'] = params if params
+      render json: result, status: status
     end
-
-
-    def render_object_errors(obj, status = 400)
-      if obj.is_a?(ActiveRecord::Base) # ActiveModel::Model for Mongoid
-        render_object_errors(obj.errors, status)
-      elsif obj.is_a?(ActiveModel::Errors)
-        render_errors(obj.full_messages, status)
-      else
-        render_errors(obj, status)
-      end
-    end
-
   end
 end

@@ -35,5 +35,7 @@ module NoveoCart
     config.generators do |g|
       g.test_framework :rspec
     end
+
+    config.exceptions_app = self.routes
   end
 end

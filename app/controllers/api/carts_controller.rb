@@ -27,7 +27,14 @@ class Api::CartsController < ApplicationController
   def delete_product
     @cart = Cart.last
     product_id = params[:product_id].to_i
-    @purchase = @cart.carts_products.where(product_id: product_id).last
+    render_400 && return if params[:product_id].nil?
+
+    @purchase = @cart.carts_products.find_by_product_id(product_id)
+    if @purchase.nil?
+      render_404('product_not_found', 'there is no such product in cart')
+      return
+    end
+
     @purchase.destroy
     head :ok
   end
@@ -35,10 +42,9 @@ class Api::CartsController < ApplicationController
   def cart
     @cart = Cart.last
     products = @cart.products
-    actual_products = products.uniq
     products_arr = []
     total_sum = @cart.total_price
-    actual_products.each do |product|
+    products.uniq.each do |product|
       id = product.id
       quantity = products.where(id: id).count
       sum = product.price * quantity
