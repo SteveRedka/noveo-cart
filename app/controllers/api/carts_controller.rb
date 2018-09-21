@@ -49,6 +49,7 @@ class Api::CartsController < ApplicationController
   end
 
   def product_params_valid?
+    errors = []
     unless products_params[:quantity].to_i.between?(1, 10)
       render_400(message: 'Quantity is invalid')
       return false
@@ -58,6 +59,37 @@ class Api::CartsController < ApplicationController
       return false
     end
     true
+  end
+
+  def product_params_valid?
+    errors = []
+    product_id = products_params[:product_id]
+    unless product_id
+      errors << { code: 'required',
+                  message: 'Product cannot be blank.',
+                  name: 'product_id' }
+    end
+    unless product_id.to_i.to_s == product_id
+      errors << { code: 'required',
+                  message: 'Product_id is invalid',
+                  name: 'product_id' }
+    end
+    unless products_params[:quantity]
+      errors << { code: 'required',
+                  message: 'Quantity cannot be blank.',
+                  name: 'quantity' }
+    end
+    unless products_params[:quantity].to_i.between?(1, 10)
+      errors << { code: 'required',
+                  message: 'Quantity is invalid.',
+                  name: 'quantity' }
+    end
+    if errors.empty?
+      true
+    else
+      render_400(message: 'Invalid data parameters', params: errors)
+      false
+    end
   end
 
   def render_cart(total_price, products_count, products_arr)

@@ -8,8 +8,9 @@ module JSONErrors
     rescue_from ActionController::ParameterMissing, with: :render_400
 
     def render_400(type = 'invalid_param_error',
+                   params: nil,
                    message: 'Invalid data parameters')
-      render_errors(type: type, message: message, status: 400)
+      render_errors(type: type, params: params, message: message, status: 400)
     end
 
     def render_404(type = 'invalid_request_error',
